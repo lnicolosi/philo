@@ -27,9 +27,8 @@
 # define W		"\033[1;37m"	/* Bold White */
 
 
-
-
-//*** structures ***
+//********************************
+//*** STRUCTURES ***
 
 /*___________________________
 	code more readable
@@ -86,6 +85,7 @@ struct	s_table
 	t_philo		*philos; // array of philos
 };
 
+//********************************
 // *** PROTOTYPES ***
 
 // *** utils ***
