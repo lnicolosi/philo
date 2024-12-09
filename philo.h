@@ -8,6 +8,7 @@
 # include <pthread.h>
 # include <sys/time.h>
 # include <limits.h>
+# include <errno.h>
 
 /*
 	ANSI Escape Sequeces for Bold Text Colors
@@ -25,6 +26,21 @@
 # define M		"\033[1;35m"	/* Bold Magenta */
 # define C		"\033[1;36m"	/* Bold Cyan */
 # define W		"\033[1;37m"	/* Bold White */
+
+//********************************
+//*** ENUM for mutex and thread functions ***
+
+typedef enum	e_opcode
+{
+	LOCK,
+	UNLOCK,
+	INIT,
+	DESTROY,
+	CREATE,
+	JOIN,
+	DETACH,
+}				t_opcode;
+
 
 
 //********************************
@@ -91,5 +107,12 @@ struct	s_table
 // *** utils ***
 void	error_exit(const char *error);
 
+// *** parsing ***
+void	pars_input(t_table *table, char **av);
+
+// *** safe functions ***
+void	*safe_malloc(size_t bytes);
+void	safe_thread_handle(pthread_t *thread, void *(*foo)(void *), void *data, t_opcode opcode);
+void	safe_mutex_handle(t_mtx *mutex, t_opcode opcode);
 
 #endif
