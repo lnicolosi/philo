@@ -75,7 +75,7 @@ static void	handle_thread_error(int status, t_opcode opcode)
 		error_exit("The value specified by thread is not joinable!\n");
 	else if (ESRCH == status)
 		error_exit("No thread could be found correspoinding to that"
-			" specified by the given thread ID, thread!")
+			" specified by the given thread ID, thread!");
 	else if (EDEADLK == status)
 		error_exit("A deadlock was detected or the value of"
 			" thread specifies the calling thread!");

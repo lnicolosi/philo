@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 		dinner_start(&table);
 
 		//4) No leaks -> philo is full | 1 philo died
-		clean(&table);
+		//clean(&table);
 	}
 	else
 	{
