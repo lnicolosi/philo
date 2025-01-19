@@ -1,25 +1,31 @@
-#include "philo.h"
-/*
-					t_die
-	last_meal_______________________last_meal
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   monitor.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lnicolosi <lnicolosi@student.42.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/19 16:20:45 by lnicolosi         #+#    #+#             */
+/*   Updated: 2025/01/19 16:22:17 by lnicolosi        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-	maybe philo is full
-*/
-static bool philo_died(t_philo *philo)
+#include "philo.h"
+
+static bool	philo_died(t_philo *philo)
 {
 	long	elapsed;
 	long	t_to_die;
 
 	if (get_bool(&philo->philo_mutex, &philo->full))
 		return (false);
-	elapsed = gettime(MILLISECOND) - get_long(&philo->philo_mutex, &philo->last_meal_time);
+	elapsed = gettime(MILLISECOND) - get_long(&philo->philo_mutex,
+			&philo->last_meal_time);
 	t_to_die = philo->table->time_to_die / 1e3;
 	if (elapsed > t_to_die)
 		return (true);
 	return (false);
 }
-
-
 
 void	*monitor_dinner(void *data)
 {
@@ -27,11 +33,8 @@ void	*monitor_dinner(void *data)
 	t_table	*table;
 
 	table = (t_table *)data;
-
-	// make sure all philo running
-	// spinlock till all thread run
-	while (!all_threads_running(&table->table_mutex, &table->threads_running_nbr,
-			table->philo_nbr))
+	while (!all_threads_running(&table->table_mutex,
+			&table->threads_running_nbr, table->philo_nbr))
 		;
 	while (!simulation_finished(table))
 	{

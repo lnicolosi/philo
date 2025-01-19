@@ -1,17 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lnicolosi <lnicolosi@student.42.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/19 16:25:59 by lnicolosi         #+#    #+#             */
+/*   Updated: 2025/01/19 16:26:39 by lnicolosi        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-/*
-	EVEN ODD fork assignment
-*/
 static void	assign_fork(t_philo *philo, t_fork *forks, int philo_position)
 {
 	int	philo_nbr;
 
 	philo_nbr = philo->table->philo_nbr;
-
 	philo->first_fork = &forks[(philo_position + 1) % philo_nbr];
 	philo->second_fork = &forks[philo_position];
-	if(philo->id % 2 == 0)
+	if (philo->id % 2 == 0)
 	{
 		philo->first_fork = &forks[philo_position];
 		philo->second_fork = &forks[(philo_position + 1) % philo_nbr];
@@ -32,7 +40,6 @@ static void	philo_init(t_table *table)
 		philo->meals_counter = 0;
 		philo->table = table;
 		safe_mutex_handle(&philo->philo_mutex, INIT);
-
 		assign_fork(philo, table->forks, i);
 	}
 }
@@ -55,5 +62,4 @@ void	data_init(t_table *table)
 		table->forks[i].fork_id = i;
 	}
 	philo_init(table);
-
 }

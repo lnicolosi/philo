@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lnicolosi <lnicolosi@student.42.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/19 16:31:21 by lnicolosi         #+#    #+#             */
+/*   Updated: 2025/01/19 16:32:18 by lnicolosi        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static inline bool	is_digit(char c)
@@ -10,19 +22,10 @@ static inline bool	is_space(char c)
 	return ((c >= 9 && c <= 13) || 32 == c);
 }
 
-
-/*
-	1) check for negatives
-	2) check if num is legit
-		"      +329$& "
-		"    +ç%245"
-	3) check for INT_MAX
-	4) return ptr to 1st num
-*/
-static const char   *valid_input(const char *str)
+static const char	*valid_input(const char *str)
 {
-	int         len;
-	const char  *number;
+	int			len;
+	const char	*number;
 
 	len = 0;
 	while (is_space(*str))
@@ -41,10 +44,9 @@ static const char   *valid_input(const char *str)
 	return (number);
 }
 
-
 static long	ft_atol(const char *str)
 {
-	long    num;
+	long	num;
 
 	num = 0;
 	str = valid_input(str);
@@ -55,20 +57,10 @@ static long	ft_atol(const char *str)
 	return (num);
 }
 
-/*
-				  ms	ms		ms
-	./philo 5    800    200     200    [5]
-		  av[1] av[2]  av[3]  av[4]   av[5]
-	1) actual numbers
-	2) not > INT_MAX
-	3) timesstamps > 60ms
-
-	USLEEP function want micro secod (not milisecond)
-*/
 void	pars_input(t_table *table, char **av)
 {
 	table->philo_nbr = ft_atol(av[1]);
-	table->time_to_die = ft_atol(av[2]) * 1e3; //1e3 = 1000 (1 et 3 zero)
+	table->time_to_die = ft_atol(av[2]) * 1e3;
 	table->time_to_eat = ft_atol(av[3]) * 1e3;
 	table->time_to_sleep = ft_atol(av[4]) * 1e3;
 	if (table->time_to_die < 6e4
@@ -79,7 +71,4 @@ void	pars_input(t_table *table, char **av)
 		table->nbr_limit_meals = ft_atol(av[5]);
 	else
 		table->nbr_limit_meals = -1;
-
-
-
 }

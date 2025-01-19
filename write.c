@@ -1,10 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   write.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lnicolosi <lnicolosi@student.42.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/19 16:22:46 by lnicolosi         #+#    #+#             */
+/*   Updated: 2025/01/19 16:23:11 by lnicolosi        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
-
-/*
-	[time_ms] [philo_id] [action]
-
-	thread safe
-*/
 
 void	write_status(t_philo_status status, t_philo *philo, bool debug)
 {
@@ -13,12 +19,9 @@ void	write_status(t_philo_status status, t_philo *philo, bool debug)
 	elapsed = gettime(MILLISECOND) - philo->table->start_simulation;
 	if (philo->full)
 		return ;
-
 	safe_mutex_handle(&philo->table->write_mutex, LOCK);
-
 	if (debug)
 		printf("hello\n");
-	//	write_status_debug(status, philo, elapsed);
 	else
 	{
 		if ((TAKE_FIRST_FORK == status || TAKE_SECOND_FORK == status)

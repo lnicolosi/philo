@@ -1,9 +1,16 @@
-#include "philo.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   safe_functions.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lnicolosi <lnicolosi@student.42.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/19 16:26:46 by lnicolosi         #+#    #+#             */
+/*   Updated: 2025/01/19 16:30:50 by lnicolosi        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-/*
-	Module containing wrapper functions
-	with embedded controls on return
-*/
+#include "philo.h"
 
 void	*safe_malloc(size_t bytes)
 {
@@ -12,37 +19,28 @@ void	*safe_malloc(size_t bytes)
 	ret = malloc(bytes);
 	if (ret == NULL)
 		error_exit("Error with the malloc!");
-	return (ret);	
+	return (ret);
 }
-/*
-	Embed controls on return status
-*/
+
 static void	handle_mutex_error(int status, t_opcode opcode)
 {
 	if (status == 0)
 		return ;
-	if (EINVAL == status && (LOCK == opcode || UNLOCK == opcode || DESTROY == opcode))
+	if (EINVAL == status && (LOCK == opcode || UNLOCK == opcode
+			|| DESTROY == opcode))
 		error_exit("The value specified by mutex is invalid!");
 	else if (EINVAL == status && INIT == opcode)
 		error_exit("The value specified by attr is invalid!");
 	else if (EDEADLK == status)
-		error_exit("A deadlock would occur if the thread blocked waiting for mutex!");
+		error_exit("A deadlock occur if the thread blocked waiting for mutex!");
 	else if (EPERM == status)
 		error_exit("The current thread does not hold a lock on mutex!");
 	else if (ENOMEM == status)
-		error_exit("The process cannot allocate enough memory to create another mutex!");
+		error_exit("The process cant alloc enough memory to create new mutex!");
 	else if (EBUSY == status)
 		error_exit("Mutex is locked!");
 }
 
-
-// *** MUTEX SAFE ***
-/*
-	int
-	destroy
-	lock
-	unlock
-*/
 void	safe_mutex_handle(t_mtx *mutex, t_opcode opcode)
 {
 	if (LOCK == opcode)
@@ -57,10 +55,6 @@ void	safe_mutex_handle(t_mtx *mutex, t_opcode opcode)
 		error_exit("Wrong opcode for mutex handle");
 }
 
-// *** THREAD SAFE ***
-/*
-	THREADS errors
-*/
 static void	handle_thread_error(int status, t_opcode opcode)
 {
 	if (status == 0)
@@ -81,10 +75,6 @@ static void	handle_thread_error(int status, t_opcode opcode)
 			" thread specifies the calling thread!");
 }
 
-/*
-	One function to handle threads
-	create join detach
-*/
 void	safe_thread_handle(pthread_t *thread, void *(*foo)(void *),
 		void *data, t_opcode opcode)
 {

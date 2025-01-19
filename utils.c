@@ -1,13 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lnicolosi <lnicolosi@student.42.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/19 16:32:49 by lnicolosi         #+#    #+#             */
+/*   Updated: 2025/01/19 16:33:13 by lnicolosi        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-/*
-	gettimeofday
-
-	time_code -> SECODS MILISECONDS MICROSECONDS
-*/
 long	gettime(t_time_code time_code)
 {
-	struct	timeval	tv;
+	struct timeval	tv;
 
 	if (gettimeofday(&tv, NULL))
 		error_exit("Gettimeofday failed");
@@ -22,14 +29,6 @@ long	gettime(t_time_code time_code)
 	return (1337);
 }
 
-/*
-	precise usleep
-
-	is the simulation finished ?
-
-	1) usleep the majority of the time, not CPU intesive
-	2) refine last microsec with spinlock
-*/
 void	precise_usleep(long usec, t_table *table)
 {
 	long	start;
@@ -39,23 +38,20 @@ void	precise_usleep(long usec, t_table *table)
 	start = gettime(MICROSECOND);
 	while (gettime(MICROSECOND) - start < usec)
 	{
-		// 1)
 		if (simulation_finished(table))
 			break ;
 		elapsed = gettime(MICROSECOND) - start;
 		remaining = usec - elapsed;
-
-		// to get a spinlock threshold
 		if (remaining > 1e3)
 			usleep(remaining / 2);
 		else
 		{
-			// SPLINLOCK
 			while (gettime(MICROSECOND) - start < usec)
 				;
 		}
 	}
 }
+
 void	clean(t_table *table)
 {
 	t_philo	*philo;

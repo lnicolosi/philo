@@ -1,11 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   getters_setters.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lnicolosi <lnicolosi@student.42.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/19 16:25:41 by lnicolosi         #+#    #+#             */
+/*   Updated: 2025/01/19 16:25:42 by lnicolosi        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-/*
-	Module containing setters_getters
-	to avoid writing LOCK UNLOCK everywhere
-*/
-
-// BOOL
 void	set_bool(t_mtx *mutex, bool *dest, bool value)
 {
 	safe_mutex_handle(mutex, LOCK);
@@ -23,7 +29,6 @@ bool	get_bool(t_mtx *mutex, bool *value)
 	return (ret);
 }
 
-// LONG
 long	get_long(t_mtx *mutex, long *value)
 {
 	long	ret;
@@ -41,9 +46,6 @@ void	set_long(t_mtx *mutex, long *dest, long value)
 	safe_mutex_handle(mutex, UNLOCK);
 }
 
-/*
-	redondant ?
-*/
 bool	simulation_finished(t_table *table)
 {
 	return (get_bool(&table->table_mutex, &table->end_simulation));

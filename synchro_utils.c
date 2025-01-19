@@ -1,19 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   synchro_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lnicolosi <lnicolosi@student.42.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/19 16:25:01 by lnicolosi         #+#    #+#             */
+/*   Updated: 2025/01/19 16:25:02 by lnicolosi        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-/*
-	SPINLOCK to synchronize philos start
-*/
 void	wait_all_threads(t_table *table)
 {
 	while (!get_bool(&table->table_mutex, &table->all_threads_ready))
 		;
 }
 
-
-/*
-	Monitor busy waits until
-	all threads are not running
-*/
 bool	all_threads_running(t_mtx *mutex, long *threads, long philo_nbr)
 {
 	bool	ret;
@@ -26,10 +30,6 @@ bool	all_threads_running(t_mtx *mutex, long *threads, long philo_nbr)
 	return (ret);
 }
 
-/*
-	Increase threads running
-	to synchro with the monitor
-*/
 void	increase_long(t_mtx *mutex, long *value)
 {
 	safe_mutex_handle(mutex, LOCK);
@@ -37,9 +37,6 @@ void	increase_long(t_mtx *mutex, long *value)
 	safe_mutex_handle(mutex, UNLOCK);
 }
 
-/*
-	Make system fair
-*/
 void	de_synchronize_philos(t_philo *philo)
 {
 	if (philo->table->philo_nbr % 2 == 0)
@@ -52,5 +49,4 @@ void	de_synchronize_philos(t_philo *philo)
 		if (philo->id % 2)
 			thinking(philo, true);
 	}
-
 }
