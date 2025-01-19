@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lnicolosi <lnicolosi@student.42.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/19 16:23:56 by lnicolosi         #+#    #+#             */
+/*   Updated: 2025/01/19 16:40:42 by lnicolosi        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 
@@ -13,7 +25,7 @@
 /*
 	write function macro
 */
-#define DEBUG_MODE	0
+# define DEBUG_MODE	0
 
 /*
 	ANSI Escape Sequeces for Bold Text Colors
@@ -34,7 +46,7 @@
 
 //********************************
 //*** ENUM philo states
-typedef enum	e_status
+typedef enum e_status
 {
 	EATING,
 	SLEEPING,
@@ -42,10 +54,10 @@ typedef enum	e_status
 	TAKE_FIRST_FORK,
 	TAKE_SECOND_FORK,
 	DIED,
-}				t_philo_status;
+}	t_philo_status;
 
 //*** ENUM opcode for mutex and thread functions ***
-typedef enum	e_opcode
+typedef enum e_opcode
 {
 	LOCK,
 	UNLOCK,
@@ -54,17 +66,15 @@ typedef enum	e_opcode
 	CREATE,
 	JOIN,
 	DETACH,
-}				t_opcode;
+}	t_opcode;
 
 //*** ENUM codes for gettime ***
-typedef enum	e_time_code
+typedef enum e_time_code
 {
 	SECOND,
 	MILLISECOND,
 	MICROSECOND,
-}				t_time_code;
-
-
+}	t_time_code;
 
 //********************************
 //*** STRUCTURES ***
@@ -77,57 +87,56 @@ typedef pthread_mutex_t	t_mtx;
 /*___________________________
 	IOU for compiler
 */
-typedef struct	s_table	t_table;
+typedef struct s_table	t_table;
 
 /*___________________________
 	FORK
 */
-typedef struct	s_fork
+typedef struct s_fork
 {
 	t_mtx	fork;
 	int		fork_id;
-}				t_fork;
+}	t_fork;
 
 /*___________________________
 	PHILO
 
 	./philo 5 800 200 200 [5]
 */
-typedef struct	s_philo
+typedef struct s_philo
 {
 	int			id;
 	long		meals_counter;
 	bool		full;
-	long		last_meal_time;	// time passed from last meal
+	long		last_meal_time;
 	t_fork		*first_fork;
 	t_fork		*second_fork;
-	pthread_t	thread_id; // a philo is a thread
-	t_mtx		philo_mutex; //useful for races with the monitor
-	t_table		*table;
-	
-}				t_philo;
+	pthread_t	thread_id;
+	t_mtx		philo_mutex;
+	t_table		*table;	
+}	t_philo;
 
 /*_____________________________
 	TABLE
 	
 	./philo 5 800 200 200 [5]
 */
-struct	s_table
+struct s_table
 {
-	long		philo_nbr; // 5
-	long		time_to_die; // 800
-	long		time_to_eat; // 200
-	long		time_to_sleep; // 200
-	long		nbr_limit_meals; // [5] | FLAG if -1
-	long		start_simulation; 
-	bool		end_simulation; // a philo dies or all philo full
-	bool		all_threads_ready; // syncro philos
+	long		philo_nbr;
+	long		time_to_die;
+	long		time_to_eat;
+	long		time_to_sleep;
+	long		nbr_limit_meals;
+	long		start_simulation;
+	bool		end_simulation;
+	bool		all_threads_ready;
 	long		threads_running_nbr;
 	pthread_t	monitor;
-	t_mtx		table_mutex; // avoid races while reading from table
+	t_mtx		table_mutex;
 	t_mtx		write_mutex;
-	t_fork		*forks; // array of forks
-	t_philo		*philos; // array of philos
+	t_fork		*forks;
+	t_philo		*philos;
 };
 
 //********************************
@@ -157,7 +166,8 @@ void	data_init(t_table *table);
 
 // *** safe functions ***
 void	*safe_malloc(size_t bytes);
-void	safe_thread_handle(pthread_t *thread, void *(*foo)(void *), void *data, t_opcode opcode);
+void	safe_thread_handle(pthread_t *thread, void *(*foo)(void *),
+			void *data, t_opcode opcode);
 void	safe_mutex_handle(t_mtx *mutex, t_opcode opcode);
 
 // *** synchro utils ***
